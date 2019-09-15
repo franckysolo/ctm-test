@@ -1,6 +1,6 @@
 ## Testing Click Meeting API
 
-Conference starts_at field cannot be updated as describe to documentation
+Conference starts_at field cannot be updated as describe in the documentation
 
 ## To run the Testing
 
