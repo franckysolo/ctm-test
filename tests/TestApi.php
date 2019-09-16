@@ -55,4 +55,39 @@ class TestApi extends TestCase {
     // fail => the starts_at field is not updated
     $this->assertEquals($actual, '2019-09-19T15:30:00+02:00');
   }
+
+  /**
+   * @test
+   */
+  public function cm_can_get_settings_conference() {
+    $roomId = '2502830';
+    $result = json_decode($this->api->conference($roomId));
+    $this->assertTrue($result->conference->settings->thank_you_emails_enabled);
+    $this->assertFalse($result->conference->settings->show_on_personal_page);
+    $this->assertFalse($result->conference->settings->connection_tester_enabled);
+  }
+
+  /**
+   * @test
+   */
+  public function cm_can_edit_settings_conference() {
+    $roomId = '2502830';
+    $result = json_decode($this->api->editConference($roomId, ['settings' => [
+      'thank_you_emails_enabled' => true,
+      'show_on_personal_page' => false,
+      'connection_tester_enabled' => true,
+      'social_media_sharing_enabled' => true
+    ]]));
+    $this->assertTrue($result->conference->settings->thank_you_emails_enabled);
+    $this->assertFalse($result->conference->settings->show_on_personal_page);
+    $this->assertTrue($result->conference->settings->connection_tester_enabled);
+    $this->assertObjectHasAttribute('thank_you_emails_enabled', $result->conference->settings);
+    $this->assertObjectHasAttribute('show_on_personal_page', $result->conference->settings);
+    $this->assertObjectHasAttribute('connection_tester_enabled', $result->conference->settings);
+    // Fail
+    $this->assertObjectHasAttribute('social_media_sharing_enabled', $result->conference->settings);
+    // fail
+    // $this->assertTrue($result->conference->settings->social_media_sharing_enabled);
+  }
+
 }
