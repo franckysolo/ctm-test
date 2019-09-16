@@ -8,7 +8,7 @@ use App\Hello;
 
 class TestApi extends TestCase {
 
-  protected $apiKey = 'eu6917f3d874c59d4ce1c03bf7768c433f1059da74';
+  protected $apiKey = 'your-api-key';
   protected $api;
 
   protected function setUp() {
