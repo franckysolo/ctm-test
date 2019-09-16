@@ -8,7 +8,7 @@ use App\Hello;
 
 class TestApi extends TestCase {
 
-  protected $apiKey = 'your-api-key';
+  protected $apiKey = 'eu6917f3d874c59d4ce1c03bf7768c433f1059da74';
   protected $api;
 
   protected function setUp() {
@@ -62,9 +62,9 @@ class TestApi extends TestCase {
   public function cm_can_get_settings_conference() {
     $roomId = '2502830';
     $result = json_decode($this->api->conference($roomId));
-    $this->assertTrue($result->conference->settings->thank_you_emails_enabled);
-    $this->assertFalse($result->conference->settings->show_on_personal_page);
-    $this->assertFalse($result->conference->settings->connection_tester_enabled);
+    $this->assertObjectHasAttribute('thank_you_emails_enabled', $result->conference->settings);
+    $this->assertObjectHasAttribute('show_on_personal_page', $result->conference->settings);
+    $this->assertObjectHasAttribute('connection_tester_enabled', $result->conference->settings);
   }
 
   /**
@@ -75,19 +75,23 @@ class TestApi extends TestCase {
     $result = json_decode($this->api->editConference($roomId, ['settings' => [
       'thank_you_emails_enabled' => true,
       'show_on_personal_page' => false,
-      'connection_tester_enabled' => true,
+      'connection_tester_enabled' => false,
       'social_media_sharing_enabled' => true
     ]]));
+
     $this->assertTrue($result->conference->settings->thank_you_emails_enabled);
     $this->assertFalse($result->conference->settings->show_on_personal_page);
-    $this->assertTrue($result->conference->settings->connection_tester_enabled);
+
     $this->assertObjectHasAttribute('thank_you_emails_enabled', $result->conference->settings);
     $this->assertObjectHasAttribute('show_on_personal_page', $result->conference->settings);
     $this->assertObjectHasAttribute('connection_tester_enabled', $result->conference->settings);
     // Fail
     $this->assertObjectHasAttribute('social_media_sharing_enabled', $result->conference->settings);
     // fail
-    // $this->assertTrue($result->conference->settings->social_media_sharing_enabled);
+    $this->assertTrue($result->conference->settings->thank_you_emails_enabled);
+    $this->assertFalse($result->conference->settings->show_on_personal_page);
+    $this->assertFalse($result->conference->settings->connection_tester_enabled);
+    $this->assertTrue($result->conference->settings->social_media_sharing_enabled);
   }
 
 }
